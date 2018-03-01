@@ -3,15 +3,28 @@
 infNatSum<-read.csv(file.choose())
 A<-infNatSum$TOTAL.A
 B<-infNatSum$TOTAL.B
-weeks<-infNatSum$WEEK
+weeks<-infNatSum$YEAR
+positive_percent<-infNatSum$PERCENT.POSITIVE
+a_percent<-infNatSum$PERCENT.A
+b_percent<-infNatSum$PERCENT.B
 col_length<-length(B)
 data=matrix(B, nrow=1,ncol=col_length)
 data<-rbind(data,A)
-#colnames(data)=weeks
+colnames(data)=weeks
 rownames(data)=c("B","A")
- 
 # Get the stacked barplot
-barplot(data, col=colors()[c(50,100)] , ylim=c(0,20000),border="white", names.arg=weeks,space=0.100, legend=rownames(data), font.axis=1, xlab="Week of Death", ylab="number of deaths",font.lab=2)
+par(las=2)
+barplot(data, col=c("darkgreen","yellow3") , ylim=c(0,20000),border="white",space=0.100, legend=rownames(data), font.axis=1, xlab="Week", ylab="Number of Positive Specimens",font.lab=2)
+par(new=TRUE)
+plot(positive_percent, type = "l", axes = FALSE, xlab = "", ylab="",col="black", font.axis=1)
+axis(side=4, at=pretty(range(positive_percent)))
+par(new=TRUE)
+plot(a_percent, type = "l", axes = FALSE, xlab = "", ylab="",col="red", font.axis=1)
+par(new=TRUE)
+plot(b_percent, type = "l", axes = FALSE, xlab = "", ylab="",col="green", font.axis=1)
+mtext("positive_percent", side=4,line=0)
+legend(1, 95, legend=c("Percent Positive", "% Positive FLU A", "% Positive FLU B"),
+       col=c("black", "red","green"), lty=1:2, cex=0.8)
 ```
 
 ```{r}
