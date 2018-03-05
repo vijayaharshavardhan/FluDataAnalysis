@@ -14,16 +14,17 @@ colnames(data)=weeks
 rownames(data)=c("B","A")
 # Get the stacked barplot
 par(las=2)
+par(mar=c(4,4,4,10))
 barplot(data, col=c("darkgreen","yellow3") ,main="Influenza Positive tests reported by clinical labarotaries", ylim=c(0,20000),border="white",space=0.100, font.axis=1, xlab="Week", ylab="Number of Positive Specimens",font.lab=2)
 legend(x=max(data)+0.5,fill=c("darkgreen","yellow3","black", "red","green"),legend=c("A","B","Percent Positive", "% Positive FLU A", "% Positive FLU B"),pch=1)
 par(new=TRUE)
 plot(positive_percent, type = "l", axes = FALSE, xlab = "", ylab="",col="black", font.axis=1)
-axis(side=4, at=pretty(range(positive_percent)))
+axis(side=4, las=1,at=pretty(range(positive_percent)))
 par(new=TRUE)
-plot(a_percent, type = "l", axes = FALSE, xlab = "", ylab="",col="red", font.axis=1)
+lines(a_percent, type = "l",col="red", font.axis=1)
 par(new=TRUE)
-plot(b_percent, type = "l", axes = FALSE, xlab = "", ylab="",col="green", font.axis=1)
-mtext("positive_percent", side=4,line=0)
+lines(b_percent, type = "l",col="green", font.axis=1)
+mtext("positive_percent", side=4,line=2)
 
 ```
 
@@ -67,7 +68,7 @@ states <- map_data("state")
 ACTIVITY.LEVEL=infHeatData$ACTIVITY.LEVEL
 sim_data <- data.frame(region=unique(tolower(infHeatData$STATENAME)), ACTIVITY.LEVEL)
 sim_data_geo <- merge(states, sim_data, by="region")
-qplot(long, lat, main="2017-18 Influenza Season Week 4 ending Feb 17, 2018
+qplot(long, lat, main="2017-18 Influenza Season Week 4 ending Jan 27, 2018
 ",data=sim_data_geo, geom="polygon", fill=ACTIVITY.LEVEL, group=group)
 ```
 
