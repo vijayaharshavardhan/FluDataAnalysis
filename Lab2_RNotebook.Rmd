@@ -87,7 +87,10 @@ week<-infMData$Year
 expe<-infMData$Expected
 thres<-infMData$Threshold
 percent<-infMData$Percent.of.Deaths.Due.to.Pneumonia.and.Influenza
-plot(thres, type = "l", xlab = "", ylab="",col="black",xaxt="n",font.axis=1)
+plot(thres, ylim=c(2,12), type = "l", xlab = "", ylab="",col="black",xaxt="n",font.axis=1)
+lines(expe,col="blue")
+lines(percent,col="red")
+axis(1,at=1:length(week),labels=week,tck=0)
 ```
 
 ```{r}
