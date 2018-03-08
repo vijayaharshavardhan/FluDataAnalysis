@@ -80,9 +80,14 @@ iliData<-read.table(file.choose())
 ```{r}
 #influenza mortality data
 infMData<-read.csv(file.choose())
-week<-infMData$Year
 expe<-infMData$Expected
-
+ thres<-infMData$Threshold
+ percent<-infMData$Percent.of.Deaths.Due.to.Pneumonia.and.Influenza
+plot(thres,ylim=c(4,12), xaxt="n",type = "l",xlab = "MMWR Week", ylab="% of all deaths due to P&I",col="black",font.axis=1)
+axis(1, at=1:length(week), labels=infMData$Week,tck=0)
+lines(expe,col="blue")
+lines(percent,col="red")
+legend("topright",fill=c("black","blue","red"),legend=c("Threshold","Expected","% of deaths due to P&I"),pch=1)
 ```
 
 ```{r}
