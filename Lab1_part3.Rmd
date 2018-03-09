@@ -25,10 +25,10 @@ access_sec_key<-"L3EN4SAhQuz8lwtvYg4S2nmdZt5KBnrkym783vwbd7Xen"
 #Authenticate twitter api
 setup_twitter_oauth(consu_key, consu_sec_key, access_token, access_sec_key)
 #search tweets
-tweets <- searchTwitter("flu OR #flu OR influenza OR #influenza -filter:retweets", n = 500, lang = "en")
+tweets <- searchTwitter("flu OR #flu OR influenza OR #influenza -filter:retweets", n = 2500, lang = "en")
 #add tweets to a dataframe and store it to a file
 tweets.df <-twListToDF(tweets)
-write.csv(tweets.df, "flutweets.csv")
+write.csv(tweets.df, file="twitterData.csv",col.names = F,append = T,sep = ",",dec = ".",qmethod = "double")
 users<-lookupUsers(tweets.df$screenName)
 length(users)
 userDf<-twListToDF(users)  # add users to a dataframe
@@ -36,22 +36,22 @@ userDf$location=str_replace_all(userDf$location,"[^[:graph:]]", " ")#replace all
 valid_users<-!is.na(userDf$location) #store only those users who have location
 users_geo_location<-geocode(userDf$location)
 users_geo_location<-na.omit(users_geo_location)
-pointsDF<-users_geo_location
-#functionality to obtain state names from the coordinates
+user_coordinates<-users_geo_location
+user_coordinates
+write.csv(user_coordinates, file="geocodes1.csv",col.names = F,append = T,sep = ",",dec = ".",qmethod = "double")
+all_coordinates<-read.csv(file="geocodes.csv")
+all_coordinates
+all_coordinatesDF <-data.frame(all_coordinates) 
+#functionality to obtain state names from the coordinates Source: https://stackoverflow.com/questions/8751497/latitude-longitude-coordinates-to-state-code-in-r/8751965
 states <- map('state', fill=TRUE, col="transparent", plot=FALSE)
-IDs <- sapply(strsplit(states$names, ":"), function(x) x[1])
-states_sp <- map2SpatialPolygons(states, IDs=IDs,
+state_IDs <- sapply(strsplit(states$names, ":"), function(x) x[1])
+states_sp <- map2SpatialPolygons(states, IDs=state_IDs,
                  proj4string=CRS("+proj=longlat +datum=WGS84"))
-
-# Convert pointsDF to a SpatialPoints object 
-pointsSP <- SpatialPoints(pointsDF, 
+spatial_points <- SpatialPoints(all_coordinatesDF, 
                 proj4string=CRS("+proj=longlat +datum=WGS84"))
-
-# Use 'over' to get _indices_ of the Polygons object containing each point 
-indices <- over(pointsSP, states_sp)
-
-# Return the state names of the Polygons object containing each point
+indices <- over(spatial_points, states_sp)
 stateNames <- sapply(states_sp@polygons, function(x) x@ID)
+# Till here
 tweet_states<-stateNames[indices]
 tweets_freq<-table(tweet_states)
 tweets_freqDF<-as.data.frame(table(tweet_states))
@@ -61,6 +61,6 @@ tweets_statecount_data$region
 plotData<- merge(states,tweets_statecount_data, by="region",all = TRUE)
 plotData[is.na(plotData)] <- 0
 frequency<-plotData$tweets_freqDF.Freq
-qplot(long,lat,main="tweets per state",data=plotData,geom="polygon",fill=frequency,group=group)
+qplot(long,lat,main="Tweets tweeted per state with #flu or #Influenza",data=plotData,geom="polygon",fill=frequency,group=group)
 ```
 

@@ -1,6 +1,6 @@
 ```{r}
 #influenza national summary
-infNatSum<-read.csv(file.choose())
+infNatSum<-read.csv(file.choose()) # Please choose nat_summary.csv from the data folder
 A<-infNatSum$TOTAL.A
 B<-infNatSum$TOTAL.B
 weeks<-infNatSum$YEAR
@@ -30,7 +30,7 @@ mtext("positive_percent", side=4,line=2)
 
 ```{r}
 #influenza positive tested
-infPosData<-read.csv(file.choose())
+infPosData<-read.csv(file.choose()) # Please choose Positive_tested.csv from the data folder
 flu_a_h3<-infPosData$A..H3.
 flu_a_2009<-infPosData$A..2009.H1N1.
 flu_a_subtype<-infPosData$A..Subtyping.not.Performed.
@@ -54,16 +54,9 @@ legend(x=max(mat_data)+0.5,fill=c("darkgreen","green","red","pink","orange","yel
 ```
 
 ```{r}
-# influenza sub type
-infSubtype<-read.csv(file.choose())
-
-
-```
-
-```{r}
 #influenza heat map
 library(ggplot2)
-infHeatData<-read.csv(file.choose())
+infHeatData<-read.csv(file.choose())   # Please choose usa_state_map.csv from the data folder
 states <- map_data("state")
 ACTIVITY.LEVEL=infHeatData$ACTIVITY.LEVEL
 sim_data <- data.frame(region=unique(tolower(infHeatData$STATENAME)), ACTIVITY.LEVEL)
@@ -72,19 +65,18 @@ qplot(long, lat, main="2017-18 Influenza Season Week 4 ending Jan 27, 2018
 ",data=sim_data_geo, geom="polygon", fill=ACTIVITY.LEVEL, group=group)
  ```
 
-```{r}
-#influenza like illness data
-iliData<-read.table(file.choose())
-```
 
 ```{r}
 #influenza mortality data
-infMData<-read.csv(file.choose())
+infMData<-read.csv(file.choose()) # Please choose mortality.csv from the data folder
 expe<-infMData$Expected
  thres<-infMData$Threshold
  percent<-infMData$Percent.of.Deaths.Due.to.Pneumonia.and.Influenza
 plot(thres,ylim=c(4,12), xaxt="n",type = "l",xlab = "MMWR Week", ylab="% of all deaths due to P&I",col="black",font.axis=1)
 axis(1, at=1:length(week), labels=infMData$Week,tck=0)
+x_year_panel<- seq(1, length(week), by=40)
+year_labels <- c("2009","2009",)
+axis(1, at=x_year_panel,)
 lines(expe,col="blue")
 lines(percent,col="red")
 legend("topright",fill=c("black","blue","red"),legend=c("Threshold","Expected","% of deaths due to P&I"),pch=1)
@@ -92,7 +84,7 @@ legend("topright",fill=c("black","blue","red"),legend=c("Threshold","Expected","
 
 ```{r}
 #pediatric mortality data
-ped_m_data<-read.csv(file.choose())
+ped_m_data<-read.csv(file.choose()) # Please choose pediatric_mortality.csv from the data folder
 weeks<-ped_m_data$WEEK.NUMBER
 prev_weeks_death<-ped_m_data$PREVIOUS.WEEKS.DEATHS
 curr_weeks_death<-ped_m_data$CURRENT.WEEK.DEATHS
